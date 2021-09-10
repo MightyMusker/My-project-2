@@ -1,0 +1,105 @@
+function draw() {
+	//giving color to cars
+	playercar1.shapeColor="red";
+	playercar2.shapeColor="red";
+
+  //giving color to background
+  background("green");
+  
+  //giving colour to text
+  fill("white");
+  textSize(20);
+  
+   if(gamestate===1){
+  
+      text("Press space to begin",125,150);
+       //using for loop to create dash line
+       for (var i = 0; i < 400; i+=20) {
+       line(i,200,i+10,200);
+      } 
+    }
+    
+    text(player1score,20,240);
+    text(player2score,20,180);
+  
+  // creating function to serve
+    if(keyDown("space")&&gamestate===1){
+       serve();
+      gamestate=2;
+    }
+    //colliding player1 and player2 cars from edges
+     edges=createEdgeSprites();
+     playercar1.collide(edges);
+     playercar2.collide(edges);
+     
+     //bouncing off ball from edges and cars
+      ball.bounceOff(playercar2);
+      ball.bounceOff(playercar1);
+      ball.bounceOff(edges);
+      
+    
+    if(ball.isTouching(goal1)){
+        player1score=player1score+1;
+        reset();
+        gamestate=1; 
+    }
+    if(ball.isTouching(goal2)){
+        player2score=player2score+1;
+        reset();
+        gamestate=1;
+    }
+   
+   //giving controls to playercar1
+  if (keyDown("up")){
+    playercar1.velocityY=-10;
+  }
+  if(keyDown("left")){
+    playercar1.velocityX=-10;
+  }
+  if (keyDown("right")){
+    playercar1.velocityX=10;
+  }
+   if (keyDown("down")){
+	playercar1.velocityY=10;
+   }
+  
+   //giving controls to playercar2
+  if (keyDown("s")){
+    playercar2.velocityY=-10;
+  }
+  if(keyDown("a")){
+    playercar2.velocityX=-10;
+  }
+  if (keyDown("d")){
+    playercar2.velocityX=10;
+  }
+   if (keyDown("w")){
+	playercar2.velocityY=10;
+   }
+    
+  if(player1score===5||player2score===5){
+      text("GAME OVER",150,180);
+      gamestate=3;
+      text("PRESS R TO RESTART",130,220);
+    }
+  if(keyDown("r")&&gamestate===3){
+      gamestate=1;
+      player1score=0;
+      player2score=0;
+    }
+  
+  drawSprites();
+}
+//creating function serve
+function serve(){
+  ball.setVelocity(3, 5);
+}
+
+//creating function reset
+function reset(){
+  playercar1.y=40;
+  playercar2.x=200;
+  ball.setVelocity(0,0);
+	ball.y=200;
+  ball.x=200;
+}
